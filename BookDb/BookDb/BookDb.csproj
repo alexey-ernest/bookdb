@@ -167,10 +167,15 @@
     <Compile Include="Constants\RouteNames.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DAL\Author.cs" />
+    <Compile Include="DAL\AuthorRepository.cs" />
     <Compile Include="DAL\Book.cs" />
     <Compile Include="DAL\BookDatabase.cs" />
+    <Compile Include="DAL\BookRepository.cs" />
+    <Compile Include="DAL\IAuthorRepository.cs" />
     <Compile Include="DAL\IBookDatabase.cs" />
+    <Compile Include="DAL\IBookRepository.cs" />
     <Compile Include="Exceptions\BookException.cs" />
+    <Compile Include="Exceptions\BadRequestException.cs" />
     <Compile Include="Exceptions\ConflictException.cs" />
     <Compile Include="Exceptions\NotFoundException.cs" />
     <Compile Include="Global.asax.cs">

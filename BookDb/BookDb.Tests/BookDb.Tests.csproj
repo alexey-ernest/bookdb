@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="DAL\AuthorTest.cs" />
     <Compile Include="DAL\BookDatabaseTest.cs" />
+    <Compile Include="DAL\BookRepositoryTest.cs" />
     <Compile Include="DAL\BookTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
