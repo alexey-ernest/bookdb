@@ -11,7 +11,8 @@ namespace BookDb
     {
         protected void Application_Start()
         {
-            IoCConfig.GetConfiguredContainer();
+            var container = IoCConfig.GetConfiguredContainer();
+            InitializersConfig.Configure(container);
             JsonConfig.Configure(GlobalConfiguration.Configuration);
 
             AreaRegistration.RegisterAllAreas();

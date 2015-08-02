@@ -152,12 +152,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Controllers\Api\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\InitializersConfig.cs" />
     <Compile Include="App_Start\JsonConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\IoCConfig.cs" />
@@ -165,6 +165,8 @@
     <Compile Include="App_Start\UnityWebApiActivator.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Constants\RouteNames.cs" />
+    <Compile Include="Controllers\Api\AuthorsController.cs" />
+    <Compile Include="Controllers\Api\BooksController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="DAL\Author.cs" />
     <Compile Include="DAL\AuthorRepository.cs" />
@@ -184,6 +186,9 @@
     <Compile Include="Infrastructure\Filters\HttpExceptionHandlingAttribute.cs" />
     <Compile Include="Infrastructure\Filters\ValidationHttpAttribute.cs" />
     <Compile Include="Infrastructure\Helpers\HtmlHelpers.cs" />
+    <Compile Include="Infrastructure\Initializers\IInitializable.cs" />
+    <Compile Include="Infrastructure\Initializers\ISeedInitializer.cs" />
+    <Compile Include="Infrastructure\Initializers\SeedInitializer.cs" />
     <Compile Include="Infrastructure\Threading\AsyncOneManyLock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

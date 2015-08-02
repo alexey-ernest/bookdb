@@ -401,6 +401,52 @@ namespace BookDb.Tests.DAL
         }
 
         [TestMethod]
+        public void AddBookWithAuthorIdsTest()
+        {
+            var author1 = new Author
+            {
+                FirstName = "Jeff",
+                LastName = "Richter"
+            };
+            author1 = _db.AddAuthorAsync(author1).Result;
+
+            var author2 = new Author
+            {
+                FirstName = "Bill",
+                LastName = "Gates"
+            };
+            author2 = _db.AddAuthorAsync(author2).Result;
+
+            var book = new Book
+            {
+                Title = "CLR via C#",
+                Pages = 900,
+                Publisher = "IT Books",
+                Published = DateTime.Now.Date.AddYears(-5),
+                Isbn = Guid.NewGuid().ToString(),
+                Image = "https://www.google.ru/images/srpr/logo11w.png",
+                Authors = new List<Author>
+                {
+                    new Author { Id = author1.Id },
+                    new Author { Id = author2.Id }
+                }
+            };
+
+            var result = _db.AddBookAsync(book).Result;
+
+            Assert.AreEqual(2, result.Authors.Count);
+
+            var auth1 = result.Authors.FirstOrDefault(a => a.Id == author1.Id);
+            var auth2 = result.Authors.FirstOrDefault(a => a.Id == author2.Id);
+            Assert.IsNotNull(auth1);
+            Assert.IsNotNull(auth2);
+            Assert.AreEqual(author1.FirstName, auth1.FirstName);
+            Assert.AreEqual(author1.LastName, auth1.LastName);
+            Assert.AreEqual(author2.FirstName, auth2.FirstName);
+            Assert.AreEqual(author2.LastName, auth2.LastName);
+        }
+
+        [TestMethod]
         public void GetBookTest()
         {
             var book = new Book

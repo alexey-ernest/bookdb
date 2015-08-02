@@ -14,9 +14,17 @@ namespace BookDb.Infrastructure.Filters
         public override void OnException(HttpActionExecutedContext context)
         {
             var exception = context.Exception;
-            if (exception is NotFoundException)
+            if (exception is BadRequestException)
+            {
+                context.Response = new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+            else if (exception is NotFoundException)
             {
                 context.Response = new HttpResponseMessage(HttpStatusCode.NotFound);
+            }
+            else if (exception is ConflictException)
+            {
+                context.Response = new HttpResponseMessage(HttpStatusCode.Conflict);
             }
             else
             {

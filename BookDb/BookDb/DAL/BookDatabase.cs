@@ -83,6 +83,9 @@ namespace BookDb.DAL
                 // set id
                 book.Id = _bookIds++;
 
+                // load book relations
+                LoadBookRelations(book);
+
                 // add to storage
                 _books.Add(book.Id, book);
 
@@ -385,6 +388,15 @@ namespace BookDb.DAL
                             author.FirstName, author.LastName, author.Id));
                     }
                 }
+            }
+        }
+
+        private void LoadBookRelations(Book book)
+        {
+            if (book.Authors != null)
+            {
+                var authors = book.Authors.Select(author => _authors[author.Id]).ToList();
+                book.Authors = authors;
             }
         }
 
