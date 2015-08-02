@@ -11,14 +11,16 @@ namespace BookDb.DAL
     /// </summary>
     public class BookDatabase : IBookDatabase
     {
-        private readonly Dictionary<Author, List<Book>> _authorBooks = new Dictionary<Author, List<Book>>();
-        private readonly Dictionary<int, Author> _authors = new Dictionary<int, Author>();
-        private readonly Dictionary<Book, List<Author>> _bookAuthors = new Dictionary<Book, List<Author>>();
-        private readonly Dictionary<int, Book> _books = new Dictionary<int, Book>();
         private readonly AsyncOneManyLock _lock = new AsyncOneManyLock();
+
         private int _authorIds = 1;
+        private readonly Dictionary<int, Author> _authors = new Dictionary<int, Author>();
         private List<Author> _authorsByName = new List<Author>();
+
         private int _bookIds = 1;
+        private readonly Dictionary<int, Book> _books = new Dictionary<int, Book>();        
+        private readonly Dictionary<Author, List<Book>> _authorBooks = new Dictionary<Author, List<Book>>();
+        private readonly Dictionary<Book, List<Author>> _bookAuthors = new Dictionary<Book, List<Author>>();
         private List<Book> _booksByPublishedDate = new List<Book>();
         private List<Book> _booksByTitle = new List<Book>();
 
