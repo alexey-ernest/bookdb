@@ -20,7 +20,6 @@ namespace BookDb.DAL
         private int _bookIds = 1;
         private readonly Dictionary<int, Book> _books = new Dictionary<int, Book>();        
         private readonly Dictionary<Author, List<Book>> _authorBooks = new Dictionary<Author, List<Book>>();
-        private readonly Dictionary<Book, List<Author>> _bookAuthors = new Dictionary<Book, List<Author>>();
         private List<Book> _booksByPublishedDate = new List<Book>();
         private List<Book> _booksByTitle = new List<Book>();
 
@@ -97,7 +96,7 @@ namespace BookDb.DAL
                 {
                     foreach (var author in book.Authors)
                     {
-                        AddBookAuthorRelationship(book, author);
+                        AddAuthorBookRelationship(book, author);
                     }
                 }
             }
@@ -132,13 +131,13 @@ namespace BookDb.DAL
                     var deletedAuthors = original.Authors.Where(a => book.Authors.All(auth => auth.Id != a.Id));
                     foreach (var author in deletedAuthors)
                     {
-                        DeleteBookAuthorRelationship(original, author);
+                        DeleteAuthorBookRelationship(original, author);
                     }
 
                     var newAuthors = book.Authors.Where(a => original.Authors.All(auth => auth.Id != a.Id));
                     foreach (var author in newAuthors)
                     {
-                        AddBookAuthorRelationship(original, author);
+                        AddAuthorBookRelationship(original, author);
                     }
                 }
 
@@ -188,7 +187,7 @@ namespace BookDb.DAL
                 {
                     foreach (var author in book.Authors)
                     {
-                        DeleteBookAuthorRelationship(book, author);
+                        DeleteAuthorBookRelationship(book, author);
                     }
                 }
 
@@ -311,7 +310,7 @@ namespace BookDb.DAL
                 {
                     foreach (var book in authorBooks)
                     {
-                        DeleteBookAuthorRelationship(book, author);
+                        DeleteAuthorBookRelationship(book, author);
                     }
                 }
 
@@ -345,19 +344,10 @@ namespace BookDb.DAL
             return authors != null ? authors.Select(b => (Author) b.Clone()).ToList() : null;
         }
 
-        private void AddBookAuthorRelationship(Book book, Author author)
+        private void AddAuthorBookRelationship(Book book, Author author)
         {
             book = _books[book.Id];
             author = _authors[author.Id];
-
-            if (_bookAuthors.ContainsKey(book))
-            {
-                _bookAuthors[book].Add(author);
-            }
-            else
-            {
-                _bookAuthors.Add(book, new List<Author> {author});
-            }
 
             if (_authorBooks.ContainsKey(author))
             {
@@ -369,18 +359,10 @@ namespace BookDb.DAL
             }
         }
 
-        private void DeleteBookAuthorRelationship(Book book, Author author)
+        private void DeleteAuthorBookRelationship(Book book, Author author)
         {
             book = _books[book.Id];
             author = _authors[author.Id];
-
-            var bookAuthors = _bookAuthors[book];
-            bookAuthors.Remove(author);
-            if (!bookAuthors.Any())
-            {
-                // no more authors
-                _bookAuthors.Remove(book);
-            }
 
             var authorBooks = _authorBooks[author];
             authorBooks.Remove(book);

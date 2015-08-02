@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using BookDb.DAL;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -28,6 +29,25 @@ namespace BookDb.Tests.DAL
 
             Assert.AreNotSame(author, result);
             Assert.IsTrue(result.Id > 0);
+            Assert.AreEqual(author.FirstName, result.FirstName);
+            Assert.AreEqual(author.LastName, result.LastName);
+        }
+
+        [TestMethod]
+        public void GetAuthorTest()
+        {
+            var author = new Author
+            {
+                FirstName = "Bill",
+                LastName = "Gates"
+            };
+
+            author = _db.AddAuthorAsync(author).Result;
+
+            var result = _db.GetAuthorAsync(author.Id).Result;
+
+            Assert.AreNotSame(author, result);
+            Assert.AreEqual(author.Id, result.Id);
             Assert.AreEqual(author.FirstName, result.FirstName);
             Assert.AreEqual(author.LastName, result.LastName);
         }
@@ -228,6 +248,60 @@ namespace BookDb.Tests.DAL
             Assert.AreEqual(2, authors.Count);
             Assert.AreEqual(author1.LastName, authors[0].LastName);
             Assert.AreEqual(author2.LastName, authors[1].LastName);
+        }
+
+        [TestMethod]
+        public void AddBookWithoutAuthorsTest()
+        {
+            var book = new Book
+            {
+                Title = "CLR via C#",
+                Pages = 900,
+                Publisher = "IT Books",
+                Published = DateTime.Now.Date.AddYears(-5),
+                Isbn = Guid.NewGuid().ToString(),
+                Image = "https://www.google.ru/images/srpr/logo11w.png"
+            };
+
+            var result = _db.AddBookAsync(book).Result;
+
+            Assert.IsTrue(result.Id > 0);
+            Assert.AreNotSame(book, result);
+            Assert.AreEqual(book.Title, result.Title);
+            Assert.AreEqual(book.Pages, result.Pages);
+            Assert.AreEqual(book.Publisher, result.Publisher);
+            Assert.AreEqual(book.Published, result.Published);
+            Assert.AreEqual(book.Isbn, result.Isbn);
+            Assert.AreEqual(book.Image, result.Image);
+        }
+
+        [TestMethod]
+        public void AddBookWithUnexistingAuthorTest()
+        {
+            var book = new Book
+            {
+                Title = "CLR via C#",
+                Pages = 900,
+                Publisher = "IT Books",
+                Published = DateTime.Now.Date.AddYears(-5),
+                Isbn = Guid.NewGuid().ToString(),
+                Image = "https://www.google.ru/images/srpr/logo11w.png",
+                Authors = new List<Author>
+                {
+                    new Author()
+                }
+            };
+
+            try
+            {
+                _db.AddBookAsync(book).Wait();
+            }
+            catch (Exception)
+            {
+                return;
+            }
+            
+            Assert.Fail();
         }
     }
 }
