@@ -3,6 +3,7 @@
 
     var app = angular.module('app', [
         'directives',
+        'filters',
         'ui.router', // for ui routing
         'infinite-scroll', // for auto-scrolling
         'app.books'
@@ -10,6 +11,7 @@
 
     // Third party libraries
     app.value('jQuery', window.$);
+    app.value('moment', window.moment);
 
     // Config
     app.config([

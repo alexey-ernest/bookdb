@@ -6,7 +6,7 @@
     <h1>Books <a class="btn btn-default" ui-sref="^.bookcreate"><i class="glyphicon glyphicon-plus"></i></a></h1>
     <div class="list-group">
         <a href="" ng-repeat="i in items" ui-sref="^.bookdetails({id: i.id})" class="list-group-item">
-            {{i.title}} <small> &mdash; {{i.published | limitTo: 10}} </small>
+            {{i.title}} <small> &mdash; {{i.published | apiDate: 'LL'}} </small>
         </a>
     </div>
 

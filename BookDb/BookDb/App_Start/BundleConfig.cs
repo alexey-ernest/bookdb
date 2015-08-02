@@ -20,6 +20,7 @@ namespace BookDb
                 "~/Scripts/respond.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/app").Include(
+                "~/Scripts/moment.js",
                 "~/Scripts/angular.js",
                 "~/Scripts/ng-infinite-scroll.js",
                 "~/Scripts/angular-resource.js",

@@ -95,21 +95,31 @@
     ]);
 
     module.controller('BookDetailsCtrl', [
-        '$scope', '$state', 'bookService', '$stateParams',
-        function ($scope, $state, bookService, $stateParams) {
+        '$scope', '$state', 'bookService', '$stateParams', 'moment',
+        function ($scope, $state, bookService, $stateParams, moment) {
 
             $scope.item = null;
             $scope.isLoading = false;
+
+            function parseDate(dateStr) {
+                var date = moment(dateStr);;
+                return date.toDate();
+            }
+
+            function printDate(date) {
+                return date.toISOString();
+            }
 
             $scope.update = function (form, item) {
                 if (form.$invalid) {
                     return;
                 }
 
-                item.published = item.publishedDate.toISOString();
+                item.published = printDate(item.publishedDate);
 
                 item.$isLoading = true;
                 item.$update().then(function () {
+                    item.publishedDate = parseDate(item.published);
                     item.$isLoading = false;
                 }, function (reason) {
                     item.$isLoading = false;
@@ -130,19 +140,14 @@
                 $scope.isLoading = true;
                 bookService.get(id).then(function (data) {
                     $scope.item = data;
-
-                    // parsing date
-                    var dateregex = /(\d{4})-(\d{2})-(\d{2})/;
-                    var match = data.published.match(dateregex);
-                    if (match) {
-                        data.publishedDate = new Date(match[1], match[2], match[3]);
-                    }
-                    
+                    data.publishedDate = parseDate(data.published);
                     $scope.isLoading = false;
                 }, function () {
                     $scope.isLoading = false;
                 });
             }
+
+            
 
             load($stateParams.id);
         }
