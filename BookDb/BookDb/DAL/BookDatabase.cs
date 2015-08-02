@@ -20,7 +20,7 @@ namespace BookDb.DAL
         private int _bookIds = 1;
         private readonly Dictionary<int, Book> _books = new Dictionary<int, Book>();        
         private readonly Dictionary<Author, List<Book>> _authorBooks = new Dictionary<Author, List<Book>>();
-        private List<Book> _booksByPublishedDate = new List<Book>();
+        private List<Book> _booksByPublishedDateDesc = new List<Book>();
         private List<Book> _booksByTitle = new List<Book>();
 
         public async Task<List<Book>> GetBooksByPublishedDateAsync()
@@ -28,7 +28,7 @@ namespace BookDb.DAL
             try
             {
                 await _lock.WaitAsync(OneManyMode.Shared);
-                var result = _booksByPublishedDate;
+                var result = _booksByPublishedDateDesc;
 
                 // cloning books and their authors
                 return Copy(result);
@@ -88,7 +88,7 @@ namespace BookDb.DAL
 
                 // update indexes
                 _booksByTitle.Add(book);
-                _booksByPublishedDate.Add(book);
+                _booksByPublishedDateDesc.Add(book);
                 UpdateBookIndexes();
 
                 // sync author relations
@@ -179,7 +179,7 @@ namespace BookDb.DAL
 
                 // remove from sorting indexes
                 _booksByTitle.Remove(book);
-                _booksByPublishedDate.Remove(book);
+                _booksByPublishedDateDesc.Remove(book);
                 UpdateBookIndexes();
 
                 // updating author relations
@@ -391,7 +391,7 @@ namespace BookDb.DAL
         private void UpdateBookIndexes()
         {
             _booksByTitle = _booksByTitle.OrderBy(b => b.Title).ToList();
-            _booksByPublishedDate = _booksByPublishedDate.OrderBy(b => b.Published).ToList();
+            _booksByPublishedDateDesc = _booksByPublishedDateDesc.OrderByDescending(b => b.Published).ToList();
         }
 
         private void UpdateAuthorIndexes()
