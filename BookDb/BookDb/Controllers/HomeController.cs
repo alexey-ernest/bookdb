@@ -6,7 +6,8 @@ namespace BookDb.Controllers
     [RoutePrefix("")]
     public class HomeController : Controller
     {
-        [Route("books/{*url}")]
+        [Route("{id:int}")]
+        [Route("new")]
         [Route(Name = RouteNames.HomeMvc)]
         public ActionResult Index()
         {

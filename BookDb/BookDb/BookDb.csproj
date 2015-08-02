@@ -166,14 +166,20 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Constants\RouteNames.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Infrastructure\Exceptions\BookException.cs" />
-    <Compile Include="Infrastructure\Exceptions\NotFoundException.cs" />
+    <Compile Include="DAL\Author.cs" />
+    <Compile Include="DAL\Book.cs" />
+    <Compile Include="DAL\BookDatabase.cs" />
+    <Compile Include="DAL\IBookDatabase.cs" />
+    <Compile Include="Exceptions\BookException.cs" />
+    <Compile Include="Exceptions\ConflictException.cs" />
+    <Compile Include="Exceptions\NotFoundException.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Infrastructure\Filters\HttpExceptionHandlingAttribute.cs" />
     <Compile Include="Infrastructure\Filters\ValidationHttpAttribute.cs" />
     <Compile Include="Infrastructure\Helpers\HtmlHelpers.cs" />
+    <Compile Include="Infrastructure\Threading\AsyncOneManyLock.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

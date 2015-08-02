@@ -1,4 +1,4 @@
-﻿namespace BookDb.Infrastructure.Exceptions
+﻿namespace BookDb.Exceptions
 {
     public class NotFoundException : BookException
     {

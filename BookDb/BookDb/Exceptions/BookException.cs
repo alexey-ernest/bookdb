@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BookDb.Infrastructure.Exceptions
+namespace BookDb.Exceptions
 {
     public class BookException : ApplicationException
     {

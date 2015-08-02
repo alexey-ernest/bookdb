@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Http;
 using System.Web.Http.Filters;
-using BookDb.Infrastructure.Exceptions;
+using BookDb.Exceptions;
 
 namespace BookDb.Infrastructure.Filters
 {
