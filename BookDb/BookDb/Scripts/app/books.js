@@ -106,6 +106,8 @@
                     return;
                 }
 
+                item.published = item.publishedDate.toISOString();
+
                 item.$isLoading = true;
                 item.$update().then(function () {
                     item.$isLoading = false;
@@ -128,6 +130,14 @@
                 $scope.isLoading = true;
                 bookService.get(id).then(function (data) {
                     $scope.item = data;
+
+                    // parsing date
+                    var dateregex = /(\d{4})-(\d{2})-(\d{2})/;
+                    var match = data.published.match(dateregex);
+                    if (match) {
+                        data.publishedDate = new Date(match[1], match[2], match[3]);
+                    }
+                    
                     $scope.isLoading = false;
                 }, function () {
                     $scope.isLoading = false;

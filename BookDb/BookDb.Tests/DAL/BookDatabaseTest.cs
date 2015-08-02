@@ -572,7 +572,7 @@ namespace BookDb.Tests.DAL
             book.Title += "2";
             book.Pages += 20;
             book.Publisher += "2";
-            book.Published = book.Published.AddYears(2);
+            book.Published = book.Published.HasValue ? book.Published.Value.AddYears(2) : (DateTime?) null;
             book.Isbn += "2";
             book.Image += "2";
             book.Authors = new List<Author> { author2 };
@@ -644,7 +644,7 @@ namespace BookDb.Tests.DAL
             book2 = _db.AddBookAsync(book2).Result;
             book3 = _db.AddBookAsync(book3).Result;
 
-            book2.Published = book2.Published.AddYears(-2);
+            book2.Published = book2.Published.HasValue ? book2.Published.Value.AddYears(-2) : (DateTime?) null;
             book2 = _db.UpdateBookAsync(book2).Result;
 
             var result = _db.GetBooksByPublishedDateAsync().Result;

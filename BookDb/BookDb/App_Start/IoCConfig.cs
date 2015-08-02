@@ -1,5 +1,6 @@
 using System;
 using BookDb.DAL;
+using BookDb.Infrastructure.Initializers;
 using Microsoft.Practices.Unity;
 
 namespace BookDb
@@ -9,6 +10,22 @@ namespace BookDb
     /// </summary>
     public class IoCConfig
     {
+        /// <summary>Registers the type mappings with the Unity container.</summary>
+        /// <param name="container">The unity container to configure.</param>
+        /// <remarks>
+        ///     There is no need to register concrete types such as controllers or API controllers (unless you want to
+        ///     change the defaults), as Unity allows resolving a concrete type even if it was not previously registered.
+        /// </remarks>
+        public static void RegisterTypes(IUnityContainer container)
+        {
+            container.RegisterType<IBookDatabase, BookDatabase>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IAuthorRepository, AuthorRepository>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IBookRepository, BookRepository>(new ContainerControlledLifetimeManager());
+
+            // Initializers
+            container.RegisterType<ISeedInitializer, SeedInitializer>(new ContainerControlledLifetimeManager());
+        }
+
         #region Unity Container
 
         private static readonly Lazy<IUnityContainer> Container = new Lazy<IUnityContainer>(() =>
@@ -27,18 +44,5 @@ namespace BookDb
         }
 
         #endregion
-
-        /// <summary>Registers the type mappings with the Unity container.</summary>
-        /// <param name="container">The unity container to configure.</param>
-        /// <remarks>
-        ///     There is no need to register concrete types such as controllers or API controllers (unless you want to
-        ///     change the defaults), as Unity allows resolving a concrete type even if it was not previously registered.
-        /// </remarks>
-        public static void RegisterTypes(IUnityContainer container)
-        {
-            container.RegisterType<IBookDatabase, BookDatabase>(new ContainerControlledLifetimeManager());
-            container.RegisterType<IAuthorRepository, AuthorRepository>(new ContainerControlledLifetimeManager());
-            container.RegisterType<IBookRepository, BookRepository>(new ContainerControlledLifetimeManager());
-        }
     }
 }

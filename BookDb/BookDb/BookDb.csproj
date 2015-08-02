@@ -190,10 +190,13 @@
     <Compile Include="Infrastructure\Initializers\ISeedInitializer.cs" />
     <Compile Include="Infrastructure\Initializers\SeedInitializer.cs" />
     <Compile Include="Infrastructure\Threading\AsyncOneManyLock.cs" />
+    <Compile Include="Infrastructure\Validation\DateRangeAttribute.cs" />
+    <Compile Include="Infrastructure\Validation\IsbnAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\images\brand.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -1014,6 +1017,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Scripts\version.json" />
     <Content Include="Scripts\jquery-2.1.4.min.map" />
+    <Content Include="Views\Home\_Books.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

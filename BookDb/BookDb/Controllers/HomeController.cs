@@ -8,6 +8,7 @@ namespace BookDb.Controllers
     {
         [Route("{id:int}")]
         [Route("new")]
+        [Route("authors/{*url}")]
         [Route(Name = RouteNames.HomeMvc)]
         public ActionResult Index()
         {

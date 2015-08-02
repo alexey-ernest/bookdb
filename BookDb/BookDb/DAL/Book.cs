@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using BookDb.Infrastructure.Validation;
 
 namespace BookDb.DAL
 {
@@ -22,10 +23,11 @@ namespace BookDb.DAL
         [MaxLength(30)]
         public string Publisher { get; set; }
 
-        // min 1800 year
-        public DateTime Published { get; set; }
+        [DateRange(MinDate = "1800-01-01")]
+        public DateTime? Published { get; set; }
 
-        // https://en.wikipedia.org/wiki/International_Standard_Book_Number
+        [Display(Name = "ISBN 10 or 13")]
+        [Isbn]
         public string Isbn { get; set; }
 
         public string Image { get; set; }
