@@ -108,7 +108,7 @@ namespace BookDb.DAL
                 _lock.Release();
             }
 
-            return book;
+            return Copy(book);
         }
 
         public async Task<Book> UpdateBookAsync(Book book)
