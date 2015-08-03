@@ -112,3 +112,5 @@ UpgradeLog*.XML
 
 *.DotSettings
 
+# Images
+Images/

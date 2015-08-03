@@ -1,15 +1,15 @@
-﻿(function (window, angular) {
-    'use strict';
+﻿(function(window, angular) {
+    "use strict";
 
-    var module = angular.module('services', ['ngResource']);
+    var module = angular.module("services", ["ngResource", "ngFileUpload"]);
 
-    module.factory('$exceptionHandler', [
-        function () {
-            return function (exception) {
+    module.factory("$exceptionHandler", [
+        function() {
+            return function(exception) {
 
                 var message = exception.message;
-                if (!message || message === '[object Object]') {
-                    message = 'Unknown Error';
+                if (!message || message === "[object Object]") {
+                    message = "Unknown Error";
                 }
 
                 alert(message);
@@ -17,27 +17,26 @@
         }
     ]);
 
-    module.factory('bookService', [
-        '$resource', '$q', function ($resource, $q) {
+    module.factory("bookService", [
+        "$resource", "$q", function($resource, $q) {
 
-            var url = '/api/books';
-            var resource = $resource(url + '/:id',
-            { id: '@id' },
+            var resource = $resource("/api/books/:id",
+            { id: "@id" },
             {
-                update: { method: 'PUT' }
+                update: { method: "PUT" }
             });
 
 
             return {
-                create: function (options) {
+                create: function(options) {
                     return new resource(options);
                 },
-                get: function (id) {
+                get: function(id) {
                     var deferred = $q.defer();
 
-                    resource.get({ id: id }, function (data) {
+                    resource.get({ id: id }, function(data) {
                         deferred.resolve(data);
-                    }, function () {
+                    }, function() {
                         deferred.reject();
                     });
 
@@ -49,13 +48,13 @@
                     var params = {};
 
                     if (filter.byPublishedDate) {
-                        params.id = 'published';
+                        params.id = "published";
                     }
 
                     var deferred = $q.defer();
-                    resource.query(params, function (data) {
+                    resource.query(params, function(data) {
                         deferred.resolve(data);
-                    }, function () {
+                    }, function() {
                         deferred.reject();
                     });
 
@@ -65,37 +64,56 @@
         }
     ]);
 
-    module.factory('authorService', [
-        '$resource', '$q', function ($resource, $q) {
+    module.factory("imageService", [
+        "$resource", "$q", "Upload", function ($resource, $q, Upload) {
 
-            var url = '/api/authors';
-            var resource = $resource(url + '/:id',
-            { id: '@id' },
+            var url = "/api/images";
+            var service = {};
+
+            service.upload = function(file) {
+                var promise = Upload.upload({
+                    url: url,
+                    method: "POST",
+                    file: file
+                });
+
+                return promise;
+            };
+
+            return service;
+        }
+    ]);
+
+    module.factory("authorService", [
+        "$resource", "$q", function($resource, $q) {
+
+            var resource = $resource("/api/authors/:id",
+            { id: "@id" },
             {
-                update: { method: 'PUT' }
+                update: { method: "PUT" }
             });
 
 
             return {
-                create: function (options) {
+                create: function(options) {
                     return new resource(options);
                 },
-                get: function (id) {
+                get: function(id) {
                     var deferred = $q.defer();
 
-                    resource.get({ id: id }, function (data) {
+                    resource.get({ id: id }, function(data) {
                         deferred.resolve(data);
-                    }, function () {
+                    }, function() {
                         deferred.reject();
                     });
 
                     return deferred.promise;
                 },
-                query: function () {
+                query: function() {
                     var deferred = $q.defer();
-                    resource.query({}, function (data) {
+                    resource.query({}, function(data) {
                         deferred.resolve(data);
-                    }, function () {
+                    }, function() {
                         deferred.reject();
                     });
 

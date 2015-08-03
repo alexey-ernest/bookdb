@@ -26,6 +26,7 @@ namespace BookDb
                 "~/Scripts/ng-infinite-scroll.js",
                 "~/Scripts/angular-resource.js",
                 "~/Scripts/angular-ui-router.js",
+                "~/Scripts/ng-file-upload.js",
                 "~/Scripts/ui-select.js",
                 "~/Scripts/app/*.js"));
 

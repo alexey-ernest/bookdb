@@ -1,48 +1,48 @@
-﻿(function (window, angular) {
-    'use strict';
+﻿(function(window, angular) {
+    "use strict";
 
-    var module = angular.module('app.books', [
-        'ui.router',
-        'services',
-        'ui.select',
-        'ngSanitize'
+    var module = angular.module("app.books", [
+        "ui.router",
+        "services",
+        "ui.select",
+        "ngSanitize"
     ]);
 
     // Routes
     module.config([
-        '$stateProvider', function ($stateProvider) {
+        "$stateProvider", function($stateProvider) {
             $stateProvider
-                .state('app.books', {
-                    url: '/?s',
-                    templateUrl: 'books.html',
-                    controller: 'BooksCtrl',
+                .state("app.books", {
+                    url: "/?s",
+                    templateUrl: "books.html",
+                    controller: "BooksCtrl",
                     data: {
-                        pageTitle: 'Books - BookDb'
+                        pageTitle: "Books - BookDb"
                     }
                 })
-                .state('app.bookdetails', {
-                    url: '/{id:int}',
-                    templateUrl: 'books.details.html',
-                    controller: 'BookDetailsCtrl',
+                .state("app.bookdetails", {
+                    url: "/{id:int}",
+                    templateUrl: "books.details.html",
+                    controller: "BookDetailsCtrl",
                     data: {
-                        pageTitle: 'Book Details - BookDb'
+                        pageTitle: "Book Details - BookDb"
                     }
                 })
-                .state('app.bookcreate', {
-                    url: '/new',
-                    templateUrl: 'books.create.html',
-                    controller: 'BookCreateCtrl',
+                .state("app.bookcreate", {
+                    url: "/new",
+                    templateUrl: "books.create.html",
+                    controller: "BookCreateCtrl",
                     data: {
-                        pageTitle: 'New Book - BookDb'
+                        pageTitle: "New Book - BookDb"
                     }
                 });
         }
     ]);
 
     // Controllers
-    module.controller('BooksCtrl', [
-        '$scope', '$state', 'bookService', '$stateParams',
-        function ($scope, $state, bookService, $stateParams) {
+    module.controller("BooksCtrl", [
+        "$scope", "$state", "bookService", "$stateParams",
+        function($scope, $state, bookService, $stateParams) {
 
             // PROPERTIES
             $scope.items = [];
@@ -54,15 +54,15 @@
                 $scope.isLoading = true;
 
                 var options = {};
-                if ($stateParams.s === 'p') {
+                if ($stateParams.s === "p") {
                     options.byPublishedDate = true;
                 }
 
                 return bookService.query(options)
-                    .then(function (data) {
+                    .then(function(data) {
                         $scope.items = data;
                         $scope.isLoading = false;
-                    }, function () {
+                    }, function() {
                         $scope.isLoading = false;
                         throw new Error();
                     });
@@ -78,9 +78,9 @@
         }
     ]);
 
-    module.controller('BookDetailsCtrl', [
-        '$scope', '$state', 'bookService', '$stateParams', 'moment', 'authorService',
-        function ($scope, $state, bookService, $stateParams, moment, authorService) {
+    module.controller("BookDetailsCtrl", [
+        "$scope", "$state", "bookService", "$stateParams", "moment", "authorService", "imageService",
+        function($scope, $state, bookService, $stateParams, moment, authorService, imageService) {
 
             $scope.item = null;
             $scope.authors = [];
@@ -95,7 +95,19 @@
                 return date.toISOString();
             }
 
-            $scope.update = function (form, item) {
+            $scope.uploadImage = function(file) {
+                $scope.isLoading = true;
+                imageService.upload(file)
+                    .success(function(data, status, headers) {
+                        $scope.item.image = headers("Location");
+                        $scope.isLoading = false;
+                    })
+                    .error(function() {
+                        $scope.isLoading = false;
+                    });
+            };
+
+            $scope.update = function(form, item) {
                 if (form.$invalid) {
                     return;
                 }
@@ -103,42 +115,42 @@
                 item.published = printDate(item.publishedDate);
 
                 item.$isLoading = true;
-                item.$update().then(function () {
+                item.$update().then(function() {
                     item.publishedDate = parseDate(item.published);
                     item.$isLoading = false;
-                }, function (reason) {
+                }, function(reason) {
                     item.$isLoading = false;
                     throw new Error(reason);
                 });
 
             };
 
-            $scope.delete = function (item) {
-                item.$delete().then(function () {
-                    $state.go('^.books');
-                }, function (reason) {
+            $scope.delete = function(item) {
+                item.$delete().then(function() {
+                    $state.go("^.books");
+                }, function(reason) {
                     throw new Error(reason);
                 });
-            }
+            };
 
             function load(id) {
                 $scope.isLoading = true;
-                return bookService.get(id).then(function (data) {
+                return bookService.get(id).then(function(data) {
                     $scope.item = data;
                     data.publishedDate = parseDate(data.published);
                     $scope.isLoading = false;
-                }, function () {
+                }, function() {
                     $scope.isLoading = false;
                 });
             }
 
             function loadAuthors() {
                 return authorService.query($scope.filter)
-                    .then(function (data) {
+                    .then(function(data) {
                         $scope.authors.length = 0;
                         angular.extend($scope.authors, data);
                         $scope.isLoading = false;
-                    }, function () {
+                    }, function() {
                         $scope.isLoading = false;
                     });
             }
@@ -150,24 +162,36 @@
         }
     ]);
 
-    module.controller('BookCreateCtrl', [
-        '$scope', '$state', 'bookService', 'authorService',
-        function ($scope, $state, bookService, authorService) {
+    module.controller("BookCreateCtrl", [
+        "$scope", "$state", "bookService", "authorService", "imageService",
+        function($scope, $state, bookService, authorService, imageService) {
 
             $scope.item = bookService.create({});
             $scope.authors = [];
             $scope.isLoading = false;
 
-            $scope.create = function (form, item) {
+            $scope.uploadImage = function(file) {
+                $scope.isLoading = true;
+                imageService.upload(file)
+                    .success(function (data, status, headers) {
+                        $scope.item.image = headers("Location");
+                        $scope.isLoading = false;
+                    })
+                    .error(function () {
+                        $scope.isLoading = false;
+                    });
+            };
+
+            $scope.create = function(form, item) {
                 if (form.$invalid) {
                     return;
                 }
 
                 item.$isLoading = true;
-                item.$save().then(function () {
+                item.$save().then(function() {
                     item.$isLoading = false;
-                    $state.go('^.books');
-                }, function (reason) {
+                    $state.go("^.books");
+                }, function(reason) {
                     item.$isLoading = false;
                     throw new Error(reason);
                 });
@@ -176,11 +200,11 @@
 
             function loadAuthors() {
                 return authorService.query($scope.filter)
-                    .then(function (data) {
+                    .then(function(data) {
                         $scope.authors.length = 0;
                         angular.extend($scope.authors, data);
                         $scope.isLoading = false;
-                    }, function () {
+                    }, function() {
                         $scope.isLoading = false;
                     });
             }

@@ -7,5 +7,6 @@
 
         // API
         public const string BooksApi = "BooksApi";
+        public const string ImagesApi = "ImagesApi";
     }
 }
