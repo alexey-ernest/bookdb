@@ -3,7 +3,9 @@
 
     var module = angular.module('app.books', [
         'ui.router',
-        'services'
+        'services',
+        'ui.select',
+        'ngSanitize'
     ]);
 
     // Routes
@@ -71,10 +73,11 @@
     ]);
 
     module.controller('BookDetailsCtrl', [
-        '$scope', '$state', 'bookService', '$stateParams', 'moment',
-        function ($scope, $state, bookService, $stateParams, moment) {
+        '$scope', '$state', 'bookService', '$stateParams', 'moment', 'authorService',
+        function ($scope, $state, bookService, $stateParams, moment, authorService) {
 
             $scope.item = null;
+            $scope.authors = [];
             $scope.isLoading = false;
 
             function parseDate(dateStr) {
@@ -92,6 +95,7 @@
                 }
 
                 item.published = printDate(item.publishedDate);
+                //restoreAuthors(item, $scope.bookSettings.authors, $scope.authors);
 
                 item.$isLoading = true;
                 item.$update().then(function () {
@@ -114,7 +118,7 @@
 
             function load(id) {
                 $scope.isLoading = true;
-                bookService.get(id).then(function (data) {
+                return bookService.get(id).then(function (data) {
                     $scope.item = data;
                     data.publishedDate = parseDate(data.published);
                     $scope.isLoading = false;
@@ -123,17 +127,30 @@
                 });
             }
 
-            
+            function loadAuthors() {
+                return authorService.query($scope.filter)
+                    .then(function (data) {
+                        $scope.authors.length = 0;
+                        angular.extend($scope.authors, data);
+                        $scope.isLoading = false;
+                    }, function () {
+                        $scope.isLoading = false;
+                    });
+            }
 
-            load($stateParams.id);
+            loadAuthors().then(
+                function() {
+                    load($stateParams.id);
+                });
         }
     ]);
 
     module.controller('BookCreateCtrl', [
-        '$scope', '$state', 'bookService',
-        function ($scope, $state, bookService) {
+        '$scope', '$state', 'bookService', 'authorService',
+        function ($scope, $state, bookService, authorService) {
 
             $scope.item = bookService.create({});
+            $scope.authors = [];
             $scope.isLoading = false;
 
             $scope.create = function (form, item) {
@@ -151,6 +168,19 @@
                 });
 
             };
+
+            function loadAuthors() {
+                return authorService.query($scope.filter)
+                    .then(function (data) {
+                        $scope.authors.length = 0;
+                        angular.extend($scope.authors, data);
+                        $scope.isLoading = false;
+                    }, function () {
+                        $scope.isLoading = false;
+                    });
+            }
+
+            loadAuthors();
         }
     ]);
 

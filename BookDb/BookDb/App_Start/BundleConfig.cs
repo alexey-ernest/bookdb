@@ -22,13 +22,17 @@ namespace BookDb
             bundles.Add(new ScriptBundle("~/bundles/app").Include(
                 "~/Scripts/moment.js",
                 "~/Scripts/angular.js",
+                "~/Scripts/angular-sanitize.js",
                 "~/Scripts/ng-infinite-scroll.js",
                 "~/Scripts/angular-resource.js",
                 "~/Scripts/angular-ui-router.js",
+                "~/Scripts/ui-select.js",
                 "~/Scripts/app/*.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                 "~/Content/bootstrap.css",
+                "~/Content/ui-select.css",
+                "~/Content/select2.css",
                 "~/Content/site.css"));
         }
     }
