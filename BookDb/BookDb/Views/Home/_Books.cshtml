@@ -14,6 +14,7 @@
     <div ng-repeat="i in items" class="book">
         <a href="" ui-sref="^.bookdetails({id: i.id})">
             <img ng-if="i.image" class="book-cover" ng-src="{{i.image}}">
+            <img ng-if="!i.image" class="book-cover" src="@Url.Content("~/Content/images/no-image.png")">
         </a>
         <a href="" ui-sref="^.bookdetails({id: i.id})">{{i.title}}</a>
         <small ng-if="i.published"> &mdash; {{i.published | apiDate: 'LL'}} </small>
@@ -83,6 +84,7 @@
             
             <p>&nbsp;</p>
             <div class="form-group">
+                <a href="#" class="btn btn-default" ui-sref="^.books">Back</a>
                 <button type="submit" class="btn btn-primary" ng-disabled="itemForm.$invalid || item.$isLoading || isLoading || item.authors.length == 0">
                     <span ng-if="item.$isLoading === undefined">Save</span>
                     <span ng-if="item.$isLoading === false">Saved</span>
