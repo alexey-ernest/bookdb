@@ -4,10 +4,14 @@
 <script type="text/ng-template" id="authors.html">
 
     <h1>Book Authors <a class="btn btn-default" ui-sref="^.authorcreate"><i class="glyphicon glyphicon-plus"></i></a></h1>
-    <div class="list-group">
-        <a href="" ng-repeat="i in items" ui-sref="^.authordetails({id: i.id})" class="list-group-item">
-            {{i.lastName}} {{i.firstName}}
-        </a>
+
+    <div class="col-md-6 col-md-offset-3">
+
+        <div class="list-group">
+            <a href="" ng-repeat="i in items" ui-sref="^.authordetails({id: i.id})" class="list-group-item">
+                {{i.lastName}} {{i.firstName}}
+            </a>
+        </div>
     </div>
 
     <div loader loader-if="isLoading"></div>
@@ -23,7 +27,7 @@
 
     <h1>Author Details</h1>
 
-    <div class="col-md-8 col-md-offset-2">
+    <div class="col-md-6 col-md-offset-3">
         <form class="form-horizontal" ng-if="item" name="itemForm" ng-submit="update(itemForm, item)">
             
             <div class="form-group">
@@ -61,7 +65,7 @@
 
     <h1>New Author</h1>
 
-    <div class="col-md-8 col-md-offset-2">
+    <div class="col-md-6 col-md-offset-3">
         <form class="form-horizontal" ng-if="item" name="itemForm" ng-submit="create(itemForm, item)">
             
             <div class="form-group">

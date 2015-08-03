@@ -2,19 +2,21 @@
 @using BookDb.DAL
 @using BookDb.Infrastructure.Helpers
 <script type="text/ng-template" id="books.html">
+
+    <h1>Books <a class="btn btn-default" ui-sref="^.bookcreate"><i class="glyphicon glyphicon-plus"></i></a></h1>
     
-    <div class="btn-group btn-group-xs pull-right" role="group" aria-label="sorting">
+    <div class="btn-group btn-group-xs role=" group" aria-label="sorting">
         <a href="" class="btn btn-default" ui-sref="^.books({s: null})" ui-sref-active="active"><span class="glyphicon glyphicon-sort-by-alphabet" aria-hidden="true" title="Sort by Book Title"></span> Title</a>
         <a href="" class="btn btn-default" ui-sref="^.books({s: 'p'})" ui-sref-active="active"><span class="glyphicon glyphicon-sort-by-order-alt" aria-hidden="true" title="Sort by Publish Date from Most Newer"></span> Date</a>
     </div>
     
-    <div class="clearfix"></div>
 
-    <h1>Books <a class="btn btn-default" ui-sref="^.bookcreate"><i class="glyphicon glyphicon-plus"></i></a></h1>
-    <div class="list-group">
-        <a href="" ng-repeat="i in items" ui-sref="^.bookdetails({id: i.id})" class="list-group-item">
-            <img ng-if="i.image" class="book-cover" ng-src="{{i.image}}"> {{i.title}} <small ng-if="i.published"> &mdash; {{i.published | apiDate: 'LL'}} </small>
+    <div ng-repeat="i in items" class="book">
+        <a href="" ui-sref="^.bookdetails({id: i.id})">
+            <img ng-if="i.image" class="book-cover" ng-src="{{i.image}}">
         </a>
+        <a href="" ui-sref="^.bookdetails({id: i.id})">{{i.title}}</a>
+        <small ng-if="i.published"> &mdash; {{i.published | apiDate: 'LL'}} </small>
     </div>
 
     <div loader loader-if="isLoading"></div>
@@ -33,7 +35,10 @@
     <div class="col-md-8 col-md-offset-2">
         <form class="form-horizontal" ng-if="item" name="itemForm" ng-submit="update(itemForm, item)">
             
-            <button class="btn btn-default btn-sm" ng-disabled="isLoading" ngf-select ngf-change="uploadImage($files)" ngf-accept="'image/jpeg,image/png,image/gif'">Upload Image</button>
+            <button class="btn btn-default btn-sm" ng-disabled="isLoading" ngf-select ngf-change="uploadImage($files)" ngf-accept="'image/jpeg,image/png,image/gif'">
+                <span ng-if="!item.image">Upload Image</span>
+                <span ng-if="item.image">Upload Another Image</span>
+            </button>
             <p>&nbsp;</p>
 
             <div ng-if="item.image">
@@ -103,7 +108,10 @@
 
     <div class="col-md-8 col-md-offset-2">
         
-        <button class="btn btn-default btn-sm" ng-disabled="isLoading" ngf-select ngf-change="uploadImage($files)" ngf-accept="'image/jpeg,image/png,image/gif'">Upload Image</button>
+        <button class="btn btn-default btn-sm" ng-disabled="isLoading" ngf-select ngf-change="uploadImage($files)" ngf-accept="'image/jpeg,image/png,image/gif'">
+            <span ng-if="!item.image">Upload Image</span>
+            <span ng-if="item.image">Upload Another Image</span>
+        </button>
         <p>&nbsp;</p>
         
         <div ng-if="item.image">
