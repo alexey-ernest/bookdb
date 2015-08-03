@@ -58,6 +58,12 @@
     /*table-layout:fixed*/
 }
 
+.book-cover {
+    width: 120px;
+    display: block;
+    margin: 10px auto;
+}
+
 /* Bootstrap Overridden */
 
 h1, .h1 {

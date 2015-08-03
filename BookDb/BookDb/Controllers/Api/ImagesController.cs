@@ -78,7 +78,7 @@ namespace BookDb.Controllers.Api
             }
         }
 
-        [Route("download/{*filename}", Name = RouteNames.ImagesApi)]
+        [Route("{*filename}", Name = RouteNames.ImagesApi)]
         public HttpResponseMessage Get(string filename)
         {
             var file = Path.Combine(HttpContext.Current.Server.MapPath(ImagesPath), filename);
