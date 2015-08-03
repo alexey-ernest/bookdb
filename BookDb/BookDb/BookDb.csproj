@@ -228,6 +228,7 @@
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
     <Content Include="Scripts\app\app.js" />
+    <Content Include="Scripts\app\authors.js" />
     <Content Include="Scripts\app\books.js" />
     <Content Include="Scripts\app\directives.js" />
     <Content Include="Scripts\app\filters.js" />
@@ -1023,6 +1024,7 @@
     <Content Include="Scripts\version.json" />
     <Content Include="Scripts\jquery-2.1.4.min.map" />
     <Content Include="Views\Home\_Books.cshtml" />
+    <Content Include="Views\Home\_Authors.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

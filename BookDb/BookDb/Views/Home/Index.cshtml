@@ -1,4 +1,15 @@
 ﻿
+<div class="btn-group" role="group" aria-label="">
+    <div class="btn-group" role="group">
+        <a ui-sref="app.books" ui-sref-active="active" class="btn btn-default">Books</a>
+    </div>
+    <div class="btn-group" role="group">
+        <a ui-sref="app.authors" ui-sref-active="active" class="btn btn-default">Authors</a>
+    </div>
+</div>
+
+<p>&nbsp;</p>
+<p>&nbsp;</p>
 
 <div class="row">
     <div class="col-md-10 col-md-offset-1">
@@ -18,3 +29,4 @@
 }
 
 @Html.Partial("_Books")
+@Html.Partial("_Authors")

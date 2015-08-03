@@ -1,7 +1,7 @@
 ﻿(function (window, angular) {
     'use strict';
 
-    var module = angular.module('app.books', [
+    var module = angular.module('app.authors', [
         'ui.router',
         'services'
     ]);
@@ -10,47 +10,46 @@
     module.config([
         '$stateProvider', function ($stateProvider) {
             $stateProvider
-                .state('app.books', {
-                    url: '/',
-                    templateUrl: 'books.html',
-                    controller: 'BooksCtrl',
+                .state('app.authors', {
+                    url: '/authors',
+                    templateUrl: 'authors.html',
+                    controller: 'AuthorsCtrl',
                     data: {
-                        pageTitle: 'Books - BookDb'
+                        pageTitle: 'Authors - BookDb'
                     }
                 })
-                .state('app.bookdetails', {
-                    url: '/{id:int}',
-                    templateUrl: 'books.details.html',
-                    controller: 'BookDetailsCtrl',
+                .state('app.authordetails', {
+                    url: '/authors/{id:int}',
+                    templateUrl: 'authors.details.html',
+                    controller: 'AuthorDetailsCtrl',
                     data: {
-                        pageTitle: 'Book Details - BookDb'
+                        pageTitle: 'Author Details - BookDb'
                     }
                 })
-                .state('app.bookcreate', {
-                    url: '/new',
-                    templateUrl: 'books.create.html',
-                    controller: 'BookCreateCtrl',
+                .state('app.authorcreate', {
+                    url: '/authors/new',
+                    templateUrl: 'authors.create.html',
+                    controller: 'AuthorCreateCtrl',
                     data: {
-                        pageTitle: 'New Book - BookDb'
+                        pageTitle: 'New Author - BookDb'
                     }
                 });
         }
     ]);
 
     // Controllers
-    module.controller('BooksCtrl', [
-        '$scope', '$state', 'bookService',
-        function ($scope, $state, bookService) {
+    module.controller('AuthorsCtrl', [
+        '$scope', '$state', 'authorService',
+        function ($scope, $state, authorService) {
 
             // PROPERTIES
             $scope.items = [];
-
             $scope.isLoading = false;
 
             function filterItems() {
 
                 $scope.isLoading = true;
-                return bookService.query()
+                return authorService.query($scope.filter)
                     .then(function (data) {
                         $scope.items = data;
                         $scope.isLoading = false;
@@ -70,32 +69,20 @@
         }
     ]);
 
-    module.controller('BookDetailsCtrl', [
-        '$scope', '$state', 'bookService', '$stateParams', 'moment',
-        function ($scope, $state, bookService, $stateParams, moment) {
+    module.controller('AuthorDetailsCtrl', [
+        '$scope', '$state', 'authorService', '$stateParams',
+        function ($scope, $state, authorService, $stateParams) {
 
             $scope.item = null;
             $scope.isLoading = false;
-
-            function parseDate(dateStr) {
-                var date = moment(dateStr);;
-                return date.toDate();
-            }
-
-            function printDate(date) {
-                return date.toISOString();
-            }
 
             $scope.update = function (form, item) {
                 if (form.$invalid) {
                     return;
                 }
 
-                item.published = printDate(item.publishedDate);
-
                 item.$isLoading = true;
                 item.$update().then(function () {
-                    item.publishedDate = parseDate(item.published);
                     item.$isLoading = false;
                 }, function (reason) {
                     item.$isLoading = false;
@@ -106,7 +93,7 @@
 
             $scope.delete = function (item) {
                 item.$delete().then(function () {
-                    $state.go('^.books');
+                    $state.go('^.authors');
                 }, function (reason) {
                     throw new Error(reason);
                 });
@@ -114,26 +101,23 @@
 
             function load(id) {
                 $scope.isLoading = true;
-                bookService.get(id).then(function (data) {
+                authorService.get(id).then(function (data) {
                     $scope.item = data;
-                    data.publishedDate = parseDate(data.published);
                     $scope.isLoading = false;
                 }, function () {
                     $scope.isLoading = false;
                 });
             }
 
-            
-
             load($stateParams.id);
         }
     ]);
 
-    module.controller('BookCreateCtrl', [
-        '$scope', '$state', 'bookService',
-        function ($scope, $state, bookService) {
+    module.controller('AuthorCreateCtrl', [
+        '$scope', '$state', 'authorService',
+        function ($scope, $state, authorService) {
 
-            $scope.item = bookService.create({});
+            $scope.item = authorService.create({});
             $scope.isLoading = false;
 
             $scope.create = function (form, item) {
@@ -144,7 +128,7 @@
                 item.$isLoading = true;
                 item.$save().then(function () {
                     item.$isLoading = false;
-                    $state.go('^.books');
+                    $state.go('^.authors');
                 }, function (reason) {
                     item.$isLoading = false;
                     throw new Error(reason);

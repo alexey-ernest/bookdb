@@ -6,7 +6,8 @@
         'filters',
         'ui.router', // for ui routing
         'infinite-scroll', // for auto-scrolling
-        'app.books'
+        'app.books',
+        'app.authors'
     ]);
 
     // Third party libraries

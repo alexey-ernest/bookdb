@@ -1,0 +1,92 @@
+﻿@using System.Web.Mvc.Html
+@using BookDb.DAL
+@using BookDb.Infrastructure.Helpers
+<script type="text/ng-template" id="authors.html">
+
+    <h1>Book Authors <a class="btn btn-default" ui-sref="^.authorcreate"><i class="glyphicon glyphicon-plus"></i></a></h1>
+    <div class="list-group">
+        <a href="" ng-repeat="i in items" ui-sref="^.authordetails({id: i.id})" class="list-group-item">
+            {{i.lastName}} {{i.firstName}}
+        </a>
+    </div>
+
+    <div loader loader-if="isLoading"></div>
+
+    <p ng-if="items.length == 0 && !isLoading"><i>There are no authors.</i></p>
+
+</script>
+
+<script type="text/ng-template" id="authors.details.html">
+
+    <p><a href="" class="btn btn-default btn-lg" ui-sref="^.authors">Back</a></p>
+    <p>&nbsp;</p>
+
+    <h1>Author Details</h1>
+
+    <div class="col-md-8 col-md-offset-2">
+        <form class="form-horizontal" ng-if="item" name="itemForm" ng-submit="update(itemForm, item)">
+            
+            <div class="form-group">
+                <label for="firstName">@Html.DisplayNameFor(x => new Author().FirstName)</label>
+                <input type="text" class="form-control" id="firstName" placeholder="" maxlength="20" ng-model="item.firstName" @Html.RequiredFor(x => new Author().FirstName) />
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">@Html.DisplayNameFor(x => new Author().LastName)</label>
+                <input type="text" class="form-control" id="lastName" placeholder="" maxlength="20" ng-model="item.lastName" @Html.RequiredFor(x => new Author().LastName) />
+            </div>
+
+            <p>&nbsp;</p>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" ng-disabled="itemForm.$invalid || item.$isLoading">
+                    <span ng-if="item.$isLoading === undefined">Save</span>
+                    <span ng-if="item.$isLoading === false">Saved</span>
+                    <span ng-if="item.$isLoading === true">Saving...</span>
+                </button>
+                <a href="#" class="btn btn-default" on-confirm-click confirm-click="delete(item)">Delete</a>
+            </div>
+
+        </form>
+
+        <div loader loader-if="!item && isLoading"></div>
+
+    </div>
+
+</script>
+
+<script type="text/ng-template" id="authors.create.html">
+
+    <p><a href="" class="btn btn-default btn-lg" ui-sref="^.authors">Back</a></p>
+    <p>&nbsp;</p>
+
+    <h1>New Author</h1>
+
+    <div class="col-md-8 col-md-offset-2">
+        <form class="form-horizontal" ng-if="item" name="itemForm" ng-submit="create(itemForm, item)">
+            
+            <div class="form-group">
+                <label for="firstName">@Html.DisplayNameFor(x => new Author().FirstName)</label>
+                <input type="text" class="form-control" id="firstName" placeholder="" maxlength="20" ng-model="item.firstName" @Html.RequiredFor(x => new Author().FirstName) />
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">@Html.DisplayNameFor(x => new Author().LastName)</label>
+                <input type="text" class="form-control" id="lastName" placeholder="" maxlength="20" ng-model="item.lastName" @Html.RequiredFor(x => new Author().LastName) />
+            </div>
+
+            <p>&nbsp;</p>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" ng-disabled="itemForm.$invalid || item.$isLoading">
+                    <span ng-if="item.$isLoading === undefined">Create</span>
+                    <span ng-if="item.$isLoading === false">Created</span>
+                    <span ng-if="item.$isLoading === true">Creating...</span>
+                </button>
+            </div>
+
+        </form>
+
+        <div loader loader-if="!item && isLoading"></div>
+
+    </div>
+
+</script>

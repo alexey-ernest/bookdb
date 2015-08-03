@@ -17,45 +17,6 @@
         }
     ]);
 
-    function buildODataQueryParams(filter, customParams) {
-
-        customParams = customParams || {};
-
-        var params = {};
-
-        // standard params
-        if (filter.orderBy) {
-            var order = filter.orderByDesc ? 'desc' : 'asc';
-            params['$orderby'] = filter.orderBy + ' ' + order;
-            delete filter.orderBy;
-            delete filter.orderByDesc;
-        }
-
-        if (filter.skip) {
-            params['$skip'] = filter.skip;
-            delete filter.skip;
-        }
-
-        if (filter.take) {
-            params['$top'] = filter.take;
-            delete filter.take;
-        }
-
-        // custom params
-        var filterParts = [];
-        for (var param in customParams) {
-            if (!filter.hasOwnProperty(param)) continue;
-            filterParts.push(customParams[param].replace('%', filter[param]));
-        }
-
-        if (filterParts.length > 0) {
-            var filterExpr = filterParts.join(' and ');
-            params['$filter'] = filterExpr;
-        }
-
-        return params;
-    }
-
     module.factory('bookService', [
         '$resource', '$q', function ($resource, $q) {
 
@@ -82,13 +43,57 @@
 
                     return deferred.promise;
                 },
-                query: function (filter) {
+                query: function(filter) {
 
                     filter = filter || {};
-                    var params = buildODataQueryParams(filter);
+                    var params = {};
+
+                    if (filter.byPublishedDate) {
+                        params.id = 'published';
+                    }
 
                     var deferred = $q.defer();
                     resource.query(params, function (data) {
+                        deferred.resolve(data);
+                    }, function () {
+                        deferred.reject();
+                    });
+
+                    return deferred.promise;
+                }
+            };
+        }
+    ]);
+
+    module.factory('authorService', [
+        '$resource', '$q', function ($resource, $q) {
+
+            var url = '/api/authors';
+            var resource = $resource(url + '/:id',
+            { id: '@id' },
+            {
+                update: { method: 'PUT' }
+            });
+
+
+            return {
+                create: function (options) {
+                    return new resource(options);
+                },
+                get: function (id) {
+                    var deferred = $q.defer();
+
+                    resource.get({ id: id }, function (data) {
+                        deferred.resolve(data);
+                    }, function () {
+                        deferred.reject();
+                    });
+
+                    return deferred.promise;
+                },
+                query: function () {
+                    var deferred = $q.defer();
+                    resource.query({}, function (data) {
                         deferred.resolve(data);
                     }, function () {
                         deferred.reject();
