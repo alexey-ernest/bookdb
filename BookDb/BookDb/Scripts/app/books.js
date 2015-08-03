@@ -13,7 +13,7 @@
         '$stateProvider', function ($stateProvider) {
             $stateProvider
                 .state('app.books', {
-                    url: '/',
+                    url: '/?s',
                     templateUrl: 'books.html',
                     controller: 'BooksCtrl',
                     data: {
@@ -41,8 +41,8 @@
 
     // Controllers
     module.controller('BooksCtrl', [
-        '$scope', '$state', 'bookService',
-        function ($scope, $state, bookService) {
+        '$scope', '$state', 'bookService', '$stateParams',
+        function ($scope, $state, bookService, $stateParams) {
 
             // PROPERTIES
             $scope.items = [];
@@ -52,7 +52,13 @@
             function filterItems() {
 
                 $scope.isLoading = true;
-                return bookService.query()
+
+                var options = {};
+                if ($stateParams.s === 'p') {
+                    options.byPublishedDate = true;
+                }
+
+                return bookService.query(options)
                     .then(function (data) {
                         $scope.items = data;
                         $scope.isLoading = false;
@@ -95,7 +101,6 @@
                 }
 
                 item.published = printDate(item.publishedDate);
-                //restoreAuthors(item, $scope.bookSettings.authors, $scope.authors);
 
                 item.$isLoading = true;
                 item.$update().then(function () {
