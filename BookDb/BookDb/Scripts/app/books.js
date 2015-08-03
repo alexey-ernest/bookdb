@@ -92,10 +92,14 @@
             }
 
             function printDate(date) {
-                return date.toISOString();
+                return date ? date.toISOString() : null;
             }
 
-            $scope.uploadImage = function(file) {
+            $scope.uploadImage = function (file) {
+                if (!file.length) {
+                    return;
+                }
+
                 $scope.isLoading = true;
                 imageService.upload(file)
                     .success(function(data, status, headers) {
@@ -170,7 +174,11 @@
             $scope.authors = [];
             $scope.isLoading = false;
 
-            $scope.uploadImage = function(file) {
+            $scope.uploadImage = function (file) {
+                if (!file.length) {
+                    return;
+                }
+
                 $scope.isLoading = true;
                 imageService.upload(file)
                     .success(function (data, status, headers) {
