@@ -2,7 +2,7 @@
 Single page web application with in-memory lock-free database for book management.
 
 ## Lock-free
-The heart of database is non-locking technique proposed by Jeff Richter. 
+The heart of the database is a non-locking technique proposed by Jeff Richter. 
 
 [AsyncOneManyLock](/BookDb/BookDb/Infrastructure/Threading/AsyncOneManyLock.cs) - asynchronous thread synchronization construct which allows the database to be maximum performant and scalable.
 
